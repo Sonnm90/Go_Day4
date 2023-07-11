@@ -63,7 +63,6 @@ func worker(queue chan int, workNumber int, done, ks chan bool) {
 		// nếu nhận được kill signal thì return
 		case <-ks:
 			fmt.Println("worker halted, number", workNumber)
-			time.Sleep(time.Second * 20)
 			return
 		}
 	}
@@ -105,7 +104,7 @@ func main() {
 	//fmt.Println("Xin chào main goroutine ")
 
 	//time.Sleep(time.Second)
-	//wg.Add(3)
+	//wg.Add(20)
 	//fmt.Println("Start Goroutines")
 	//
 	//go responseSize("https://vngeeks.com")
@@ -122,7 +121,6 @@ func main() {
 	//wg.Add(1)
 	//go responseSize("https://vngeeks.com", nums)
 	//fmt.Println(<-nums) // Đọc giá trị từ unbuffered channel
-	//wg.Wait()
 	//close(nums) // Đóng channel
 
 	//fmt.Println("Go Channel Tutorial")
@@ -196,6 +194,7 @@ func main() {
 	for i := 0; i < len(workers); i++ {
 		for j := 0; j < cap(taskList[i]); j++ {
 			go worker(taskList[i], i, done, killsignal)
+			time.Sleep(time.Second)
 		}
 	}
 
@@ -239,6 +238,8 @@ func main() {
 	for c := 0; c < len(totalWork); c++ {
 		<-done
 	}
-	time.Sleep(time.Second * 50)
+	time.Sleep(time.Second * 10)
+	//wg.Wait()
 	close(killsignal)
+
 }
